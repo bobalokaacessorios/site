@@ -35,13 +35,14 @@ body.home {
 }
 
 .home-brand {
+  width: min(560px, 100%);
   text-align: center;
   padding: 24px;
 }
 
 .home .logo {
-  width: min(560px, 92vw);
-  height: 124px;
+  width: 100%;
+  height: auto;
 }
 
 img {
@@ -115,10 +116,10 @@ img {
 }
 
 .logo {
-  width: min(400px, 94%);
-  height: 90px;
+  width: min(400px, 100%);
+  height: auto;
   margin: 0 auto;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
   filter: invert(1);
 }
@@ -337,7 +338,7 @@ nav {
 
   .logo {
     width: min(440px, 100%);
-    height: 98px;
+    height: auto;
   }
 }
 
