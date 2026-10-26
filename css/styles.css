@@ -256,9 +256,26 @@ nav {
 }
 
 .mosaic {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  flex-direction: column;
   gap: 8px;
+}
+
+.mosaic-row {
+  display: grid;
+  gap: 8px;
+}
+
+.mosaic-row-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.mosaic-row-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.mosaic-row-5 {
+  grid-template-columns: repeat(5, 1fr);
 }
 
 .tile {

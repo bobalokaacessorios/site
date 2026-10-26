@@ -111,36 +111,72 @@
     root.hidden = root.childElementCount === 0;
   }
 
+  function rowSizes(n) {
+    if (n <= 0) {
+      return [];
+    }
+    if (n < 3) {
+      return [n];
+    }
+
+    const fours = Math.floor(n / 4);
+    const remainder = n % 4;
+
+    if (remainder === 0) {
+      return Array(fours).fill(4);
+    }
+    if (remainder === 1) {
+      return Array(fours - 1).fill(4).concat(5);
+    }
+    if (remainder === 2) {
+      return Array(fours - 1).fill(4).concat(3, 3);
+    }
+    return Array(fours).fill(4).concat(3);
+  }
+
+  function makeLinhaTile(item, index) {
+    return createEl(
+      "a",
+      {
+        class: "tile t" + ((index % 4) + 1),
+        href: item.href,
+        target: "_blank",
+        rel: "noopener noreferrer",
+        "aria-label": item.alt || "Conheça nossas Linhas",
+      },
+      [createEl("img", { src: item.src, alt: "" })]
+    );
+  }
+
   function renderLinhas(linhas) {
     const root = document.getElementById("mosaic");
     if (!root) {
       return;
     }
 
-    root.replaceChildren();
-    (linhas || []).forEach((item, index) => {
-      if (!isSafeUrl(item.href) || !isSafeUrl(item.src)) {
-        return;
-      }
+    const items = (linhas || []).filter(
+      (item) => isSafeUrl(item.href) && isSafeUrl(item.src)
+    );
 
-      const tone = "t" + ((index % 4) + 1);
-      root.appendChild(
-        createEl(
-          "a",
-          {
-            class: "tile " + tone,
-            href: item.href,
-            target: "_blank",
-            rel: "noopener noreferrer",
-            "aria-label": item.alt || "Conheça nossas Linhas",
-          },
-          [createEl("img", { src: item.src, alt: "" })]
-        )
-      );
+    root.replaceChildren();
+    const sizes = rowSizes(items.length);
+    let offset = 0;
+
+    sizes.forEach((count) => {
+      const columns = count < 3 ? 4 : count;
+      const row = createEl("div", {
+        class: "mosaic-row mosaic-row-" + columns,
+      });
+      items.slice(offset, offset + count).forEach((item, index) => {
+        row.appendChild(makeLinhaTile(item, offset + index));
+      });
+      root.appendChild(row);
+      offset += count;
     });
+
     const section = root.closest(".linhas");
     if (section) {
-      section.hidden = root.childElementCount === 0;
+      section.hidden = items.length === 0;
     }
   }
 
