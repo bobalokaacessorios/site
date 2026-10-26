@@ -3,7 +3,7 @@
 Site institucional da Bobaloka Acessórios.
 
 - `/` — página de marca (logo e o texto Acessórios)
-- `/catalogo` — links da marca: WhatsApp, grupo VIP, localização, catálogos, linhas e redes sociais
+- `/links` — links da marca: WhatsApp, grupo VIP, localização, catálogos, linhas e redes sociais
 
 ## Como ver
 
@@ -14,13 +14,13 @@ python3 -m http.server 8765
 ```
 
 - Home: [http://127.0.0.1:8765/](http://127.0.0.1:8765/)
-- Catálogo: [http://127.0.0.1:8765/catalogo](http://127.0.0.1:8765/catalogo)
+- Links: [http://127.0.0.1:8765/links](http://127.0.0.1:8765/links)
 
 ## Estrutura
 
 ```
 index.html              Home da marca
-catalogo/index.html     Página de links e catálogo
+links/index.html        Página de links e catálogo
 css/styles.css          Layout e identidade visual
 js/main.js              Fallback de imagens
 assets/images/          Logo, foto da loja e linhas
