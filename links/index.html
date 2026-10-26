@@ -15,11 +15,7 @@
 <body>
   <div class="page">
     <aside class="hero">
-      <img
-        src="../assets/images/loja.jpg"
-        data-fallback="https://kiwi-f3qz3s.canva.link/bobaloka-acess-rios/_assets/media/136b9a3b6e578e9741b6e3a598acf99f.png"
-        alt="Fachada da loja Bobaloka Acessórios"
-      />
+      <img id="hero-image" src="../assets/images/loja.jpg" alt="Fachada da loja Bobaloka Acessórios" />
     </aside>
 
     <main class="panel">
@@ -33,72 +29,18 @@
           <div class="gold-line"></div>
         </header>
 
-        <div class="socials">
-          <a href="https://www.facebook.com/Bobalokaacessorios" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-            <img src="../assets/icons/facebook.svg" alt="" />
-          </a>
-          <a href="https://www.instagram.com/bobaloka_/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-            <img src="../assets/icons/instagram.svg" alt="" />
-          </a>
-          <a href="https://www.tiktok.com/@bobalokaacessorio" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
-            <img src="../assets/icons/tiktok.svg" alt="" />
-          </a>
-        </div>
-
-        <nav aria-label="Links principais">
-          <a class="btn btn-primary" href="https://wa.me/message/WSMJNMSPPYQ3F1" target="_blank" rel="noopener noreferrer">
-            <img class="ico" src="../assets/icons/whatsapp.svg" alt="" />
-            <span>Fale Conosco</span>
-            <img class="chev" src="../assets/icons/chevron.svg" alt="" />
-          </a>
-
-          <a class="btn btn-ghost" href="https://chat.whatsapp.com/LNPMnIO7Sr1DOEUdCmJw3t" target="_blank" rel="noopener noreferrer">
-            <img class="ico" src="../assets/icons/grupo.svg" alt="" />
-            <span>GRUPO VIP</span>
-            <img class="chev" src="../assets/icons/chevron.svg" alt="" />
-          </a>
-
-          <a class="btn btn-ghost" href="https://maps.app.goo.gl/pb8vqjSMNnrAKsy87" target="_blank" rel="noopener noreferrer">
-            <img class="ico" src="../assets/icons/local.svg" alt="" />
-            <span>Localização</span>
-            <img class="chev" src="../assets/icons/chevron.svg" alt="" />
-          </a>
-
-          <a class="btn btn-ghost" href="https://kiwi-f3qz3s.canva.link/dahvr6tegf8" target="_blank" rel="noopener noreferrer">
-            <img class="ico" src="../assets/icons/catalogo.svg" alt="" />
-            <span>CATÁLOGOS</span>
-            <img class="chev" src="../assets/icons/chevron.svg" alt="" />
-          </a>
-
-          <a class="btn btn-ghost" href="https://canva.link/4mnb7df4q1sby7g" target="_blank" rel="noopener noreferrer">
-            <img class="ico" src="../assets/icons/linhas.svg" alt="" />
-            <span>Conheça nossas Linhas</span>
-            <img class="chev" src="../assets/icons/chevron.svg" alt="" />
-          </a>
-        </nav>
+        <div class="socials" id="socials"></div>
+        <nav aria-label="Links principais" id="buttons"></nav>
 
         <section class="linhas" aria-label="Nossas linhas">
           <h2>Nossas linhas</h2>
-          <div class="mosaic">
-            <a class="tile t1" href="https://canva.link/4mnb7df4q1sby7g" target="_blank" rel="noopener noreferrer" aria-label="Conheça nossas Linhas">
-              <img src="../assets/images/linha-1.jpg" data-fallback="https://kiwi-f3qz3s.canva.link/bobaloka-acess-rios/_assets/media/a388812c7fa0ef01f77255876ef562f1.png" alt="" />
-            </a>
-            <a class="tile t2" href="https://canva.link/4mnb7df4q1sby7g" target="_blank" rel="noopener noreferrer" aria-label="Conheça nossas Linhas">
-              <img src="../assets/images/linha-2.jpg" data-fallback="https://kiwi-f3qz3s.canva.link/bobaloka-acess-rios/_assets/media/4ac3ef6ae70841d393ba1b425686c742.png" alt="" />
-            </a>
-            <a class="tile t3" href="https://canva.link/4mnb7df4q1sby7g" target="_blank" rel="noopener noreferrer" aria-label="Conheça nossas Linhas">
-              <img src="../assets/images/linha-3.jpg" data-fallback="https://kiwi-f3qz3s.canva.link/bobaloka-acess-rios/_assets/media/27f43d047ba1ca16864059ba9b86fd74.png" alt="" />
-            </a>
-            <a class="tile t4" href="https://canva.link/4mnb7df4q1sby7g" target="_blank" rel="noopener noreferrer" aria-label="Conheça nossas Linhas">
-              <img src="../assets/images/linha-4.jpg" data-fallback="https://kiwi-f3qz3s.canva.link/bobaloka-acess-rios/_assets/media/987bcf726a7acad573b23113d63a9a9f.png" alt="" />
-            </a>
-          </div>
+          <div class="mosaic" id="mosaic"></div>
         </section>
 
         <p class="foot">Bobaloka Acessórios</p>
       </div>
     </main>
   </div>
-  <script src="../js/main.js"></script>
+  <script src="../js/links.js"></script>
 </body>
 </html>
