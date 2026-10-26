@@ -27,6 +27,23 @@ body {
   background: var(--forest-deep);
 }
 
+body.home {
+  background: var(--cream);
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+.home-brand {
+  text-align: center;
+  padding: 24px;
+}
+
+.home .logo {
+  width: min(360px, 82vw);
+  height: 80px;
+}
+
 img {
   max-width: 100%;
   display: block;
