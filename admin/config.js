@@ -4,5 +4,5 @@ window.ADMIN_CONFIG = {
   branch: "main",
   contentPath: "data/links.json",
   clientId: "Ov23ct2Q1icg2ZFM4gQi",
-  oauthBaseUrl: "https://bobaloka-oauth.bobaloka.workers.dev",
+  oauthBaseUrl: "https://bobaloka.bobaloka.workers.dev",
 };
