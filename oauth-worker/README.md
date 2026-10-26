@@ -23,11 +23,11 @@ npx wrangler secret put GITHUB_CLIENT_SECRET
 
 ## 3. Ligar o admin
 
-Em `admin/config.js`:
+Em `links/admin/config.js`:
 
 ```js
 clientId: "o-client-id-do-oauth-app",
 oauthBaseUrl: "https://SEU-WORKER.workers.dev",
 ```
 
-Depois acesse `/admin` e entre com uma conta colaboradora de `bobalokaacessorios/site`.
+Depois acesse `/links/admin` e entre com uma conta colaboradora de `bobalokaacessorios/site`.

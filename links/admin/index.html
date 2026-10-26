@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#EB74A7" />
+  <title>Admin | Bobaloka Acessórios</title>
+  <link rel="icon" href="../../assets/icons/marca.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/admin.css?v=2" />
+</head>
+<body>
+  <div id="login-view" class="admin login">
+    <div class="login-box">
+      <img src="../../assets/images/logo_bobaloka.png" alt="Bobaloka" />
+      <p class="status">Entre com GitHub para editar a página /links.</p>
+      <p id="setup-note" class="setup hidden">Configure o OAuth App e o Worker. Veja o README na pasta oauth-worker.</p>
+      <button type="button" class="btn btn-primary" id="login-btn">Entrar com GitHub</button>
+      <p id="login-status" class="status"></p>
+    </div>
+  </div>
+
+  <div id="editor-view" class="admin hidden">
+    <header class="admin-header">
+      <div class="admin-brand">
+        <img src="../../assets/images/logo_bobaloka.png" alt="" />
+        <p>Painel /links</p>
+        <h1>Editar conteúdo</h1>
+      </div>
+      <div class="admin-user">
+        <p id="user-label" class="status"></p>
+        <button type="button" class="btn btn-ghost" id="logout-btn">Sair</button>
+      </div>
+    </header>
+
+    <p id="editor-status" class="status"></p>
+
+    <section class="card" id="hero-card">
+      <h2>Foto da loja</h2>
+    </section>
+
+    <section class="card">
+      <h2>Redes sociais</h2>
+      <div id="socials-list"></div>
+      <div class="card-actions">
+        <button type="button" class="btn btn-ghost" data-add="socials">Adicionar rede</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Botões</h2>
+      <div id="buttons-list"></div>
+      <div class="card-actions">
+        <button type="button" class="btn btn-ghost" data-add="buttons">Adicionar botão</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Nossas linhas</h2>
+      <div id="linhas-list"></div>
+      <div class="card-actions">
+        <button type="button" class="btn btn-ghost" data-add="linhas">Adicionar linha</button>
+      </div>
+    </section>
+
+    <div class="save-bar">
+      <button type="button" class="btn btn-primary" id="save-btn">Salvar no GitHub</button>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="../../js/admin.js"></script>
+</body>
+</html>

@@ -3,7 +3,8 @@ const ALLOWED_HOSTS = ["bobaloka.com.br", "127.0.0.1", "localhost"];
 function isAllowedRedirect(value) {
   try {
     const url = new URL(value);
-    return ALLOWED_HOSTS.includes(url.hostname) && url.pathname.startsWith("/admin");
+    const path = url.pathname.replace(/\/+$/, "") || "/";
+    return ALLOWED_HOSTS.includes(url.hostname) && path === "/links/admin";
   } catch (error) {
     return false;
   }
