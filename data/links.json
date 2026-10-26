@@ -1,75 +1,75 @@
 {
   "hero": {
-    "src": "../assets/images/loja.jpg",
+    "src": "../../assets/images/loja.jpg",
     "alt": "Fachada da loja Bobaloka Acessórios"
   },
   "socials": [
     {
       "label": "Facebook",
       "href": "https://www.facebook.com/Bobalokaacessorios",
-      "icon": "../assets/icons/facebook.svg"
+      "icon": "../../assets/icons/facebook.svg"
     },
     {
       "label": "Instagram",
       "href": "https://www.instagram.com/bobaloka_/",
-      "icon": "../assets/icons/instagram.svg"
+      "icon": "../../assets/icons/instagram.svg"
     },
     {
       "label": "TikTok",
       "href": "https://www.tiktok.com/@bobalokaacessorio",
-      "icon": "../assets/icons/tiktok.svg"
+      "icon": "../../assets/icons/tiktok.svg"
     }
   ],
   "buttons": [
     {
       "label": "Fale Conosco",
       "href": "https://wa.me/message/WSMJNMSPPYQ3F1",
-      "icon": "../assets/icons/whatsapp.svg",
+      "icon": "../../assets/icons/whatsapp.svg",
       "primary": true
     },
     {
       "label": "GRUPO VIP",
       "href": "https://chat.whatsapp.com/LNPMnIO7Sr1DOEUdCmJw3t",
-      "icon": "../assets/icons/grupo.svg",
+      "icon": "../../assets/icons/grupo.svg",
       "primary": false
     },
     {
       "label": "Localização",
       "href": "https://maps.app.goo.gl/pb8vqjSMNnrAKsy87",
-      "icon": "../assets/icons/local.svg",
+      "icon": "../../assets/icons/local.svg",
       "primary": false
     },
     {
       "label": "CATÁLOGOS",
       "href": "https://kiwi-f3qz3s.canva.link/dahvr6tegf8",
-      "icon": "../assets/icons/catalogo.svg",
+      "icon": "../../assets/icons/catalogo.svg",
       "primary": false
     },
     {
       "label": "Conheça nossas Linhas",
       "href": "https://canva.link/4mnb7df4q1sby7g",
-      "icon": "../assets/icons/linhas.svg",
+      "icon": "../../assets/icons/linhas.svg",
       "primary": false
     }
   ],
   "linhas": [
     {
-      "src": "../assets/images/linha-1.jpg",
+      "src": "../../assets/images/linha-1.jpg",
       "href": "https://canva.link/4mnb7df4q1sby7g",
       "alt": "Linha Bobaloka"
     },
     {
-      "src": "../assets/images/linha-2.jpg",
+      "src": "../../assets/images/linha-2.jpg",
       "href": "https://canva.link/4mnb7df4q1sby7g",
       "alt": "Linha Bobaloka"
     },
     {
-      "src": "../assets/images/linha-3.jpg",
+      "src": "../../assets/images/linha-3.jpg",
       "href": "https://canva.link/4mnb7df4q1sby7g",
       "alt": "Linha Bobaloka"
     },
     {
-      "src": "../assets/images/linha-4.jpg",
+      "src": "../../assets/images/linha-4.jpg",
       "href": "https://canva.link/4mnb7df4q1sby7g",
       "alt": "Linha Bobaloka"
     }
