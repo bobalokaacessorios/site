@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#1E3A2F" />
+  <meta name="theme-color" content="#EB74A7" />
   <title>Admin | Bobaloka Acessórios</title>
   <link rel="icon" href="../assets/icons/marca.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/admin.css" />
+  <link rel="stylesheet" href="../css/admin.css?v=pink" />
 </head>
 <body>
   <div id="login-view" class="admin login">
-    <div>
+    <div class="login-box">
       <img src="../assets/images/logo_bobaloka.png" alt="Bobaloka" />
       <p class="status">Entre com GitHub para editar a página /links.</p>
       <p id="setup-note" class="setup hidden">Configure o OAuth App e o Worker. Veja o README na pasta oauth-worker.</p>
@@ -29,7 +29,7 @@
         <p>Painel /links</p>
         <h1>Editar conteúdo</h1>
       </div>
-      <div>
+      <div class="admin-user">
         <p id="user-label" class="status"></p>
         <button type="button" class="btn btn-ghost" id="logout-btn">Sair</button>
       </div>
@@ -44,19 +44,25 @@
     <section class="card">
       <h2>Redes sociais</h2>
       <div id="socials-list"></div>
-      <button type="button" class="btn btn-ghost" data-add="socials">Adicionar rede</button>
+      <div class="card-actions">
+        <button type="button" class="btn btn-ghost" data-add="socials">Adicionar rede</button>
+      </div>
     </section>
 
     <section class="card">
       <h2>Botões</h2>
       <div id="buttons-list"></div>
-      <button type="button" class="btn btn-ghost" data-add="buttons">Adicionar botão</button>
+      <div class="card-actions">
+        <button type="button" class="btn btn-ghost" data-add="buttons">Adicionar botão</button>
+      </div>
     </section>
 
     <section class="card">
       <h2>Nossas linhas</h2>
       <div id="linhas-list"></div>
-      <button type="button" class="btn btn-ghost" data-add="linhas">Adicionar linha</button>
+      <div class="card-actions">
+        <button type="button" class="btn btn-ghost" data-add="linhas">Adicionar linha</button>
+      </div>
     </section>
 
     <div class="save-bar">

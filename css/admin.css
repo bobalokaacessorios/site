@@ -1,12 +1,15 @@
 :root {
   --forest: #1e3a2f;
   --forest-mid: #2a4f40;
-  --cream: #f6f0e8;
+  --cream: #fff7f4;
+  --rose: #eb74a7;
+  --rose-soft: #f4b3cf;
+  --rose-page: #f7c4d8;
   --gold: #c4a056;
   --ink: #1a2e26;
-  --muted: #5c6f66;
+  --muted: #6d4a5a;
   --white: #fffbfc;
-  --line: #ddd0be;
+  --line: #e8b7c9;
   --danger: #8a2f3b;
 }
 
@@ -19,7 +22,7 @@
 body {
   font-family: Outfit, system-ui, sans-serif;
   color: var(--ink);
-  background: var(--cream);
+  background: var(--rose-page);
   min-height: 100vh;
 }
 
@@ -31,7 +34,7 @@ body {
 
 .admin-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
   margin-bottom: 28px;
@@ -62,6 +65,18 @@ body {
   margin-top: 8px;
 }
 
+.admin-user {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.admin-user .status {
+  margin: 0;
+  text-align: right;
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -74,9 +89,11 @@ body {
   font: inherit;
   font-size: 0.9rem;
   font-weight: 500;
+  line-height: 1;
   cursor: pointer;
   text-decoration: none;
   color: inherit;
+  white-space: nowrap;
 }
 
 .btn-primary {
@@ -89,12 +106,12 @@ body {
 }
 
 .btn-ghost {
-  background: #fffaf4;
+  background: var(--white);
   border-color: var(--line);
 }
 
 .btn-danger {
-  background: transparent;
+  background: var(--white);
   color: var(--danger);
   border-color: #e3c4c8;
 }
@@ -105,7 +122,7 @@ body {
 }
 
 .card {
-  background: #fffaf4;
+  background: rgba(255, 251, 252, 0.88);
   border: 1px solid var(--line);
   border-radius: 16px;
   padding: 20px;
@@ -119,6 +136,12 @@ body {
   color: var(--muted);
   font-weight: 500;
   margin-bottom: 16px;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
 }
 
 .field {
@@ -167,20 +190,29 @@ body {
 .item-head {
   display: flex;
   justify-content: space-between;
-  gap: 8px;
+  gap: 12px;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .item-actions {
   display: flex;
   flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 8px;
+}
+
+.item-actions .btn {
+  min-width: 88px;
+  min-height: 36px;
+  padding: 0 12px;
+  font-size: 0.82rem;
 }
 
 .preview {
   width: 56px;
   height: 56px;
+  flex-shrink: 0;
   object-fit: cover;
   border-radius: 8px;
   background: var(--cream);
@@ -196,15 +228,17 @@ body {
 .row {
   display: flex;
   gap: 12px;
-  align-items: end;
+  align-items: flex-end;
 }
 
 .row .field {
   flex: 1;
+  min-width: 0;
+  margin-bottom: 0;
 }
 
 .status {
-  margin: 12px 0 20px;
+  margin: 0;
   font-size: 0.9rem;
   color: var(--muted);
 }
@@ -213,19 +247,33 @@ body {
   color: var(--danger);
 }
 
-.login {
-  min-height: 70vh;
-  display: grid;
-  place-items: center;
-  text-align: center;
-  gap: 16px;
+#editor-status {
+  margin: 0 0 16px;
 }
 
-.login img {
+.login {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+.login-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  width: min(420px, 100%);
+}
+
+.login-box img {
   width: min(280px, 70vw);
   height: auto;
   filter: invert(1);
-  margin: 0 auto 8px;
+}
+
+.login-box .btn {
+  min-width: 200px;
 }
 
 .hidden {
@@ -239,7 +287,7 @@ body {
   justify-content: flex-end;
   gap: 10px;
   padding: 16px 0 8px;
-  background: linear-gradient(180deg, transparent, var(--cream) 30%);
+  background: linear-gradient(180deg, transparent, var(--rose-page) 28%);
 }
 
 .setup {
@@ -248,6 +296,33 @@ body {
   color: var(--ink);
   border-radius: 12px;
   padding: 12px 14px;
-  margin-bottom: 16px;
   font-size: 0.88rem;
+  width: 100%;
+}
+
+@media (max-width: 640px) {
+  .item-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .item-actions {
+    justify-content: stretch;
+  }
+
+  .item-actions .btn {
+    flex: 1;
+  }
+
+  .admin-header {
+    flex-direction: column;
+  }
+
+  .admin-user {
+    align-items: flex-start;
+  }
+
+  .admin-user .status {
+    text-align: left;
+  }
 }
