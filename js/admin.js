@@ -7,18 +7,30 @@
   const editorStatus = document.getElementById("editor-status");
   const setupNote = document.getElementById("setup-note");
   const userLabel = document.getElementById("user-label");
+  const LINE_COLORS = ["#F6C660", "#D85E40", "#EB74A7", "#1e3a2f"];
 
   const emptySocial = { label: "", href: "", icon: "" };
   const emptyButton = { label: "", href: "", icon: "", primary: false };
   const emptyLinha = { src: "", href: "", alt: "" };
+  const emptyCatalogItem = { title: "", src: "", href: "" };
 
   let token = sessionStorage.getItem(TOKEN_KEY) || "";
+  let activeTab = "links";
   let sha = "";
+  let catalogosSha = "";
   let data = {
     hero: { src: "", alt: "" },
     socials: [],
     buttons: [],
     linhas: [],
+  };
+  let catalogos = {
+    contact: {
+      href: "https://wa.me/message/WSMJNMSPPYQ3F1",
+      label: "Fale com nossas vendedoras",
+      hours: ["Seg a sexta: 9:30 às 17:00", "Sábado: 9:00 às 13:00"],
+    },
+    groups: [],
   };
 
   function fromBase64(value) {
@@ -63,6 +75,19 @@
         ...(options && options.headers),
       },
     });
+  }
+
+  function contentsPath(filePath) {
+    return encodeURIComponent(filePath).replace(/%2F/g, "/");
+  }
+
+  function slug(value) {
+    return String(value || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
   }
 
   function captureTokenFromHash() {
@@ -159,6 +184,74 @@
     return head;
   }
 
+  async function fetchCatalogThumb(href) {
+    if (!href || !config.oauthBaseUrl) {
+      return "";
+    }
+    const endpoint =
+      config.oauthBaseUrl.replace(/\/$/, "") +
+      "/preview?url=" +
+      encodeURIComponent(href);
+    const response = await fetch(endpoint);
+    if (!response.ok) {
+      throw new Error("Não foi possível ler a capa desse catálogo.");
+    }
+    const payload = await response.json();
+    return payload.src || "";
+  }
+
+  function catalogLinkField(item) {
+    const wrap = document.createElement("div");
+    wrap.className = "field";
+    const lab = document.createElement("label");
+    lab.textContent = "Link do catálogo";
+    const input = document.createElement("input");
+    input.type = "url";
+    input.value = item.href || "";
+    const hint = document.createElement("p");
+    hint.className = "field-hint";
+    hint.textContent = "A miniatura usa a primeira imagem do catálogo.";
+
+    let timer = 0;
+    const applyThumb = async () => {
+      item.href = input.value.trim();
+      if (!item.href) {
+        return;
+      }
+      hint.textContent = "Buscando a primeira imagem...";
+      try {
+        const src = await fetchCatalogThumb(item.href);
+        if (src) {
+          item.src = src;
+          const scope = wrap.closest(".item");
+          if (scope) {
+            scope.querySelectorAll("img.preview").forEach((img) => {
+              img.src = src;
+            });
+            const srcInput = scope.querySelector('input[data-key="src"]');
+            if (srcInput) {
+              srcInput.value = src;
+            }
+          }
+          hint.textContent = "Capa encontrada na primeira imagem do catálogo.";
+        } else {
+          hint.textContent = "Não achei imagem nesse link. Cole a URL da capa abaixo.";
+        }
+      } catch (error) {
+        hint.textContent = error.message || "Não foi possível ler a capa desse catálogo.";
+      }
+    };
+
+    input.addEventListener("input", () => {
+      item.href = input.value.trim();
+      window.clearTimeout(timer);
+      timer = window.setTimeout(applyThumb, 700);
+    });
+    input.addEventListener("blur", applyThumb);
+    wrap.append(lab, input, hint);
+    return wrap;
+  }
+
   function renderList(rootId, list, kind) {
     const root = document.getElementById(rootId);
     root.replaceChildren();
@@ -230,55 +323,199 @@
     card.append(field("Texto alternativo", "alt", data.hero), row);
   }
 
+  function renderCatalogContact() {
+    const root = document.getElementById("catalog-contact-fields");
+    if (!root) {
+      return;
+    }
+    if (!catalogos.contact) {
+      catalogos.contact = {
+        href: "",
+        label: "",
+        hours: [],
+      };
+    }
+    const hoursBox = document.createElement("div");
+    hoursBox.className = "field";
+    const hoursLabel = document.createElement("label");
+    hoursLabel.textContent = "Horários (um por linha)";
+    const hours = document.createElement("textarea");
+    hours.value = (catalogos.contact.hours || []).join("\n");
+    hours.addEventListener("input", () => {
+      catalogos.contact.hours = hours.value
+        .split("\n")
+        .map((line) => line.trim())
+        .filter(Boolean);
+    });
+    hoursBox.append(hoursLabel, hours);
+    root.replaceChildren(
+      field("Texto do botão", "label", catalogos.contact),
+      field("Link do WhatsApp", "href", catalogos.contact, "url"),
+      hoursBox
+    );
+  }
+
+  function renderCatalogItem(group, item, index) {
+    const block = document.createElement("div");
+    block.className = "item";
+    block.append(itemChrome(group.items, index, item.title || "Catálogo " + (index + 1)));
+    const srcField = field("URL da capa", "src", item, "url");
+    const srcInput = srcField.querySelector("input");
+    srcInput.setAttribute("data-key", "src");
+    const row = document.createElement("div");
+    row.className = "row";
+    row.append(preview(item.src), srcField);
+    block.append(field("Título", "title", item), catalogLinkField(item), row);
+    return block;
+  }
+
+  function renderCatalogGroups() {
+    const root = document.getElementById("catalog-groups-list");
+    if (!root) {
+      return;
+    }
+    root.replaceChildren();
+    catalogos.groups.forEach((group, index) => {
+      if (!Array.isArray(group.items)) {
+        group.items = [];
+      }
+      const card = document.createElement("section");
+      card.className = "card";
+      const colorWrap = document.createElement("div");
+      colorWrap.className = "field";
+      const colorLabel = document.createElement("label");
+      colorLabel.textContent = "Cor da faixa";
+      const colorRow = document.createElement("div");
+      colorRow.className = "color-field";
+      const color = document.createElement("input");
+      color.type = "color";
+      color.value = /^#([0-9a-f]{6})$/i.test(group.color || "") ? group.color : "#F6C660";
+      color.addEventListener("input", () => {
+        group.color = color.value;
+      });
+      colorRow.append(color);
+      colorWrap.append(colorLabel, colorRow);
+
+      const list = document.createElement("div");
+      group.items.forEach((item, itemIndex) => {
+        list.appendChild(renderCatalogItem(group, item, itemIndex));
+      });
+
+      const add = document.createElement("div");
+      add.className = "card-actions";
+      const addBtn = document.createElement("button");
+      addBtn.type = "button";
+      addBtn.className = "btn btn-ghost";
+      addBtn.textContent = "Adicionar catálogo";
+      addBtn.addEventListener("click", () => {
+        group.items.push({ ...emptyCatalogItem });
+        renderEditor();
+      });
+      add.appendChild(addBtn);
+
+      card.append(
+        itemChrome(catalogos.groups, index, group.title || "Linha " + (index + 1)),
+        field("Título", "title", group),
+        field("Subtítulo", "subtitle", group),
+        colorWrap,
+        list,
+        add
+      );
+      root.appendChild(card);
+    });
+  }
+
+  function setTab(tab) {
+    activeTab = tab;
+    document.getElementById("tab-links").classList.toggle("hidden", tab !== "links");
+    document.getElementById("tab-catalogos").classList.toggle("hidden", tab !== "catalogos");
+    document.querySelectorAll(".admin-tabs .tab").forEach((button) => {
+      button.classList.toggle("is-active", button.getAttribute("data-tab") === tab);
+    });
+  }
+
   function renderEditor() {
     renderHero();
     renderList("socials-list", data.socials, "socials");
     renderList("buttons-list", data.buttons, "buttons");
     renderList("linhas-list", data.linhas, "linhas");
+    renderCatalogContact();
+    renderCatalogGroups();
   }
 
-  async function loadContent() {
-    const path = encodeURIComponent(config.contentPath).replace(/%2F/g, "/");
+  async function loadFile(filePath) {
     const response = await api(
-      "/repos/" + config.owner + "/" + config.repo + "/contents/" + path + "?ref=" + encodeURIComponent(config.branch)
+      "/repos/" +
+        config.owner +
+        "/" +
+        config.repo +
+        "/contents/" +
+        contentsPath(filePath) +
+        "?ref=" +
+        encodeURIComponent(config.branch)
     );
     if (!response.ok) {
-      throw new Error("Não foi possível ler data/links.json no repositório.");
+      throw new Error("Não foi possível ler " + filePath + " no repositório.");
     }
-    const file = await response.json();
-    sha = file.sha;
-    const parsed = JSON.parse(fromBase64(file.content));
-    data = {
-      hero: parsed.hero || { src: "", alt: "" },
-      socials: Array.isArray(parsed.socials) ? parsed.socials : [],
-      buttons: Array.isArray(parsed.buttons) ? parsed.buttons : [],
-      linhas: Array.isArray(parsed.linhas) ? parsed.linhas : [],
-    };
+    return response.json();
   }
 
-  async function saveContent() {
-    const path = encodeURIComponent(config.contentPath).replace(/%2F/g, "/");
-    const json = JSON.stringify(data, null, 2) + "\n";
-    const content = toBase64(json);
+  async function saveFile(filePath, payload, currentSha, message) {
     const response = await api(
-      "/repos/" + config.owner + "/" + config.repo + "/contents/" + path,
+      "/repos/" + config.owner + "/" + config.repo + "/contents/" + contentsPath(filePath),
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          message: "Update /links content from admin",
-          content,
-          sha,
+          message,
+          content: toBase64(JSON.stringify(payload, null, 2) + "\n"),
+          sha: currentSha,
           branch: config.branch,
         }),
       }
     );
     if (!response.ok) {
       const err = await response.json().catch(() => ({}));
-      throw new Error(err.message || "Falha ao salvar no GitHub.");
+      throw new Error(err.message || "Falha ao salvar " + filePath + ".");
     }
     const result = await response.json();
-    sha = result.content.sha;
+    return result.content.sha;
+  }
+
+  async function loadContent() {
+    const linksFile = await loadFile(config.contentPath);
+    sha = linksFile.sha;
+    const parsed = JSON.parse(fromBase64(linksFile.content));
+    data = {
+      hero: parsed.hero || { src: "", alt: "" },
+      socials: Array.isArray(parsed.socials) ? parsed.socials : [],
+      buttons: Array.isArray(parsed.buttons) ? parsed.buttons : [],
+      linhas: Array.isArray(parsed.linhas) ? parsed.linhas : [],
+    };
+
+    const catalogosFile = await loadFile(config.catalogosPath || "data/catalogos.json");
+    catalogosSha = catalogosFile.sha;
+    const catalogParsed = JSON.parse(fromBase64(catalogosFile.content));
+    catalogos = {
+      contact: catalogParsed.contact || catalogos.contact,
+      groups: Array.isArray(catalogParsed.groups) ? catalogParsed.groups : [],
+    };
+  }
+
+  async function saveContent() {
+    catalogos.groups.forEach((group, index) => {
+      group.id = slug(group.title) || "linha-" + (index + 1);
+      if (!group.color) {
+        group.color = LINE_COLORS[index % LINE_COLORS.length];
+      }
+    });
+    sha = await saveFile(config.contentPath, data, sha, "Update /links content from admin");
+    catalogosSha = await saveFile(
+      config.catalogosPath || "data/catalogos.json",
+      catalogos,
+      catalogosSha,
+      "Update /links/catalogos content from admin"
+    );
   }
 
   async function verifyCollaborator() {
@@ -307,7 +544,7 @@
       loginView.classList.add("hidden");
       editorView.classList.remove("hidden");
       renderEditor();
-      setStatus(editorStatus, "Conteúdo carregado. As mudanças vão para data/links.json.");
+      setStatus(editorStatus, "Conteúdo carregado. As mudanças vão para o GitHub.");
     } catch (error) {
       sessionStorage.removeItem(TOKEN_KEY);
       token = "";
@@ -340,12 +577,16 @@
     setStatus(editorStatus, "Salvando...");
     try {
       await saveContent();
-      setStatus(editorStatus, "Salvo. O GitHub Pages pode levar um minuto para atualizar /links.");
+      setStatus(editorStatus, "Salvo. O GitHub Pages pode levar um minuto para atualizar.");
     } catch (error) {
       setStatus(editorStatus, error.message, true);
     } finally {
       button.disabled = false;
     }
+  });
+
+  document.querySelectorAll("[data-tab]").forEach((button) => {
+    button.addEventListener("click", () => setTab(button.getAttribute("data-tab")));
   });
 
   document.querySelectorAll("[data-add]").forEach((button) => {
@@ -359,6 +600,15 @@
       }
       if (kind === "linhas") {
         data.linhas.push({ ...emptyLinha });
+      }
+      if (kind === "catalog-group") {
+        catalogos.groups.push({
+          id: "",
+          title: "",
+          subtitle: "",
+          color: LINE_COLORS[catalogos.groups.length % LINE_COLORS.length],
+          items: [],
+        });
       }
       renderEditor();
     });

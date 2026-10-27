@@ -31,3 +31,5 @@ oauthBaseUrl: "https://SEU-WORKER.workers.dev",
 ```
 
 Depois acesse `/links/admin` e entre com uma conta colaboradora de `bobalokaacessorios/site`.
+
+O Worker também responde em `/preview?url=` para o admin buscar a primeira imagem de um catálogo.

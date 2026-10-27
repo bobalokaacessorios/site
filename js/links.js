@@ -94,6 +94,8 @@
         src: "../assets/icons/chevron.svg",
         alt: "",
       });
+      const href = new URL(item.href, window.location.href);
+      const isInternal = href.origin === window.location.origin;
 
       root.appendChild(
         createEl(
@@ -101,8 +103,8 @@
           {
             class: item.primary ? "btn btn-primary" : "btn btn-ghost",
             href: item.href,
-            target: "_blank",
-            rel: "noopener noreferrer",
+            target: isInternal ? null : "_blank",
+            rel: isInternal ? null : "noopener noreferrer",
           },
           [icon, createEl("span", { text: item.label }), chevron]
         )

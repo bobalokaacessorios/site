@@ -65,6 +65,31 @@ body {
   margin-top: 8px;
 }
 
+.admin-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.admin-tabs .tab {
+  flex: 1;
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.admin-tabs .tab.is-active {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: var(--white);
+}
+
 .admin-user {
   display: flex;
   flex-direction: row;
@@ -159,7 +184,9 @@ body {
 }
 
 .field input[type="text"],
-.field input[type="url"] {
+.field input[type="url"],
+.field input[type="color"],
+.field textarea {
   width: 100%;
   min-height: 42px;
   padding: 0 12px;
@@ -168,6 +195,28 @@ body {
   background: var(--white);
   font: inherit;
   color: var(--ink);
+}
+
+.field input[type="color"] {
+  padding: 6px;
+  max-width: 88px;
+}
+
+.field textarea {
+  min-height: 88px;
+  padding: 10px 12px;
+  resize: vertical;
+}
+
+.field-hint {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.color-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .check {

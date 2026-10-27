@@ -4,7 +4,8 @@ Site institucional da Bobaloka Acessórios.
 
 - `/` — página de marca (logo e o texto Acessórios)
 - `/links` — links da marca (conteúdo em `data/links.json`)
-- `/links/admin` — painel para editar `/links` (login GitHub, só colaboradores)
+- `/links/catalogos` — catálogos Livre e Viva (conteúdo em `data/catalogos.json`)
+- `/links/admin` — painel para editar `/links` e `/links/catalogos` (login GitHub, só colaboradores)
 
 ## Como ver
 
@@ -14,6 +15,7 @@ python3 -m http.server 8765
 
 - Home: [http://127.0.0.1:8765/](http://127.0.0.1:8765/)
 - Links: [http://127.0.0.1:8765/links](http://127.0.0.1:8765/links)
+- Catálogos: [http://127.0.0.1:8765/links/catalogos](http://127.0.0.1:8765/links/catalogos)
 - Admin: [http://127.0.0.1:8765/links/admin](http://127.0.0.1:8765/links/admin)
 
 ## Painel admin
@@ -31,8 +33,10 @@ O admin grava `data/links.json` no repositório `bobalokaacessorios/site`.
 ```
 index.html              Home da marca
 links/index.html        Página pública de links
+links/catalogos/        Catálogos da marca
 links/admin/            Painel de edição
-data/links.json         Conteúdo editável
+data/links.json         Conteúdo editável de /links
+data/catalogos.json     Conteúdo editável de /links/catalogos
 oauth-worker/           Proxy OAuth do GitHub
 css/                    Estilos
 js/                     Scripts
