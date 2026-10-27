@@ -16,17 +16,17 @@
       "items": [
         {
           "title": "Brincos em tons marrons",
-          "src": "../assets/images/catalogo-livre-cafezinho.jpg",
+          "src": "../../assets/images/catalogo-livre-cafezinho.jpg",
           "href": "https://canva.link/5645e4t4twklfns"
         },
         {
           "title": "Brincos com designs criativos",
-          "src": "../assets/images/catalogo-livre-brincao.jpg",
+          "src": "../../assets/images/catalogo-livre-brincao.jpg",
           "href": "https://canva.link/catalogo-so-brinca"
         },
         {
           "title": "Broches de vários tamanhos e estilos",
-          "src": "../assets/images/catalogo-livre-broches.jpg",
+          "src": "../../assets/images/catalogo-livre-broches.jpg",
           "href": "https://canva.link/brochesbblk"
         }
       ]
@@ -39,12 +39,12 @@
       "items": [
         {
           "title": "Piercings de diversos tipos",
-          "src": "../assets/images/catalogo-viva-piercings.jpg",
+          "src": "../../assets/images/catalogo-viva-piercings.jpg",
           "href": "https://www.canva.com/design/DAHT4UCAuCo/YeyKSj3Ndd-1MjaItRQaLA/view"
         },
         {
           "title": "Coleção de berloques selecionados",
-          "src": "../assets/images/catalogo-viva-berloques.jpg",
+          "src": "../../assets/images/catalogo-viva-berloques.jpg",
           "href": "https://www.canva.com/design/DAHZOwoeURQ/7N_oQT0-sKUGssIStgbM0Q/view"
         }
       ]
