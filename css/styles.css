@@ -352,22 +352,22 @@ body.catalogos .logo {
 }
 
 .catalog-hero {
-  padding: 28px 22px 8px;
+  position: relative;
+  padding: 44px 22px 16px;
   text-align: center;
   background: #305b36;
 }
 
 .catalog-hero-title {
-  margin-top: 2px;
-  font-family: "Bodoni Moda", "Times New Roman", serif;
-  font-size: 1.7rem;
-  font-weight: 400;
-  color: #fff;
+  color: rgba(255, 255, 255, 0.88);
 }
 
 .back-link {
-  text-align: center;
-  margin: 16px 0 12px;
+  position: absolute;
+  top: 16px;
+  left: 18px;
+  margin: 0;
+  text-align: left;
 }
 
 .back-link a {
@@ -391,20 +391,18 @@ body.catalogos .logo {
 }
 
 .catalog-group h2 {
-  font-family: "Bodoni Moda", "Times New Roman", serif;
-  font-size: clamp(2.4rem, 12vw, 3.1rem);
-  font-weight: 400;
-  letter-spacing: 0.06em;
+  font-size: clamp(1.6rem, 6vw, 2.1rem);
+  font-weight: 500;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   color: #fff;
-  line-height: 0.95;
+  line-height: 1.05;
 }
 
 .catalog-subtitle {
-  margin-top: 2px;
-  font-family: "Bodoni Moda", "Times New Roman", serif;
-  font-size: 0.82rem;
-  letter-spacing: 0.22em;
+  margin-top: 4px;
+  font-size: 0.72rem;
+  letter-spacing: 0.42em;
   text-transform: uppercase;
   color: #fff;
 }
