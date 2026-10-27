@@ -210,18 +210,19 @@
     input.value = item.href || "";
     const hint = document.createElement("p");
     hint.className = "field-hint";
-    hint.textContent = "A miniatura usa a primeira imagem do catálogo.";
+    hint.textContent = "A miniatura usa a URL da capa. Se estiver vazia, tentamos a primeira imagem do catálogo.";
 
     let timer = 0;
     const applyThumb = async () => {
       item.href = input.value.trim();
-      if (!item.href) {
+      if (!item.href || item.src) {
         return;
       }
       hint.textContent = "Buscando a primeira imagem...";
       try {
         const src = await fetchCatalogThumb(item.href);
-        if (src) {
+        const unusable = /static\.canva\.com\/static\/images\/fb_cover/i.test(src);
+        if (src && !unusable) {
           item.src = src;
           const scope = wrap.closest(".item");
           if (scope) {
@@ -233,9 +234,9 @@
               srcInput.value = src;
             }
           }
-          hint.textContent = "Capa encontrada na primeira imagem do catálogo.";
+          hint.textContent = "Capa preenchida com a primeira imagem do catálogo.";
         } else {
-          hint.textContent = "Não achei imagem nesse link. Cole a URL da capa abaixo.";
+          hint.textContent = "Não achei a capa nesse link. Cole a URL da capa abaixo.";
         }
       } catch (error) {
         hint.textContent = error.message || "Não foi possível ler a capa desse catálogo.";

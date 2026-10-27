@@ -7,7 +7,7 @@
     }
 
     try {
-      const url = new URL(value, DATA_URL);
+      const url = new URL(value, window.location.href);
       return url.protocol === "http:" || url.protocol === "https:";
     } catch (error) {
       return false;
@@ -15,7 +15,7 @@
   }
 
   function resolveUrl(value) {
-    return new URL(value, DATA_URL).href;
+    return new URL(value, window.location.href).href;
   }
 
   function createEl(tag, attrs, children) {
