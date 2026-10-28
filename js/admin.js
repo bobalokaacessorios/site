@@ -104,6 +104,15 @@
     }
   }
 
+  const IMAGE_TYPES = {
+    "image/jpeg": ".jpg",
+    "image/png": ".png",
+    "image/webp": ".webp",
+    "image/gif": ".gif",
+    "image/svg+xml": ".svg",
+  };
+  const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+
   function field(label, key, item, type) {
     const wrap = document.createElement("div");
     wrap.className = "field";
@@ -115,15 +124,144 @@
     input.addEventListener("input", () => {
       item[key] = input.value;
       if (key === "icon" || key === "src") {
-        const scope = wrap.closest(".item, .card");
-        if (scope) {
-          scope.querySelectorAll("img.preview").forEach((img) => {
-            img.src = input.value;
-          });
-        }
+        updatePreview(wrap, input.value);
       }
     });
     wrap.append(lab, input);
+    return wrap;
+  }
+
+  function updatePreview(scopeStart, src) {
+    const scope = scopeStart && scopeStart.closest(".item, .card");
+    if (!scope) {
+      return;
+    }
+    scope.querySelectorAll("img.preview").forEach((img) => {
+      if (src) {
+        img.src = src;
+      } else {
+        img.removeAttribute("src");
+      }
+    });
+  }
+
+  function fileExtension(file) {
+    const fromName = String(file.name || "").match(/\.(jpe?g|png|webp|gif|svg)$/i);
+    if (fromName) {
+      return fromName[0].toLowerCase().replace(".jpeg", ".jpg");
+    }
+    return IMAGE_TYPES[file.type] || "";
+  }
+
+  function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = String(reader.result || "");
+        const comma = result.indexOf(",");
+        resolve(comma >= 0 ? result.slice(comma + 1) : result);
+      };
+      reader.onerror = () => reject(new Error("Não foi possível ler o arquivo."));
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function uploadAsset(file, folder) {
+    if (!file) {
+      throw new Error("Escolha uma imagem.");
+    }
+    if (file.size > MAX_IMAGE_BYTES) {
+      throw new Error("A imagem deve ter no máximo 5 MB.");
+    }
+    const ext = fileExtension(file) || IMAGE_TYPES[file.type] || "";
+    if (!ext) {
+      throw new Error("Use JPG, PNG, WebP, GIF ou SVG.");
+    }
+    const base = slug(String(file.name || "").replace(/\.[^.]+$/, "")) || "imagem";
+    const fileName = base + "-" + Date.now() + ext;
+    const repoPath = folder + "/" + fileName;
+    const content = await fileToBase64(file);
+    const response = await api(
+      "/repos/" + config.owner + "/" + config.repo + "/contents/" + contentsPath(repoPath),
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: "Add " + repoPath + " from admin",
+          content,
+          branch: config.branch,
+        }),
+      }
+    );
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.message || "Falha ao enviar a imagem para o GitHub.");
+    }
+    const result = await response.json();
+    const path = "../../" + repoPath;
+    return {
+      path,
+      previewUrl: (result.content && result.content.download_url) || path,
+    };
+  }
+
+  function imageField(label, key, item) {
+    const wrap = field(label, key, item, "url");
+    wrap.classList.add("field-image");
+    const input = wrap.querySelector("input");
+    if (key === "src") {
+      input.setAttribute("data-key", "src");
+    }
+
+    const controls = document.createElement("div");
+    controls.className = "field-image-controls";
+    input.replaceWith(controls);
+    controls.appendChild(input);
+
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = Object.keys(IMAGE_TYPES).join(",");
+    fileInput.setAttribute("aria-label", "Carregar imagem");
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "btn btn-ghost";
+    button.textContent = "Carregar imagem";
+    button.addEventListener("click", () => fileInput.click());
+
+    const hint = document.createElement("p");
+    hint.className = "field-hint";
+    hint.textContent = "Ou envie um arquivo; ele vai para o GitHub e o caminho é preenchido aqui.";
+
+    fileInput.addEventListener("change", async () => {
+      const file = fileInput.files && fileInput.files[0];
+      fileInput.value = "";
+      if (!file) {
+        return;
+      }
+      button.disabled = true;
+      hint.textContent = "Enviando para o GitHub...";
+      const localUrl = URL.createObjectURL(file);
+      updatePreview(wrap, localUrl);
+      try {
+        const uploaded = await uploadAsset(file, key === "icon" ? "assets/icons" : "assets/images");
+        item[key] = uploaded.path;
+        input.value = uploaded.path;
+        updatePreview(wrap, uploaded.previewUrl);
+        hint.textContent = "Imagem enviada. O GitHub Pages pode levar um minuto para atualizar.";
+        setStatus(editorStatus, "Imagem enviada para o GitHub.");
+      } catch (error) {
+        updatePreview(wrap, item[key] || "");
+        hint.textContent = error.message || "Falha ao enviar a imagem.";
+        setStatus(editorStatus, error.message || "Falha ao enviar a imagem.", true);
+      } finally {
+        URL.revokeObjectURL(localUrl);
+        button.disabled = false;
+      }
+    });
+
+    controls.append(button, fileInput);
+    wrap.appendChild(hint);
     return wrap;
   }
 
@@ -265,7 +403,7 @@
         block.append(itemChrome(list, index, item.label || "Rede " + (index + 1)));
         const row = document.createElement("div");
         row.className = "row";
-        row.append(preview(item.icon, true), field("URL do ícone", "icon", item, "url"));
+        row.append(preview(item.icon, true), imageField("URL do ícone", "icon", item));
         block.append(
           field("Nome", "label", item),
           field("Link", "href", item, "url"),
@@ -277,7 +415,7 @@
         block.append(itemChrome(list, index, item.label || "Botão " + (index + 1)));
         const row = document.createElement("div");
         row.className = "row";
-        row.append(preview(item.icon, true), field("URL do ícone", "icon", item, "url"));
+        row.append(preview(item.icon, true), imageField("URL do ícone", "icon", item));
         const check = document.createElement("label");
         check.className = "check";
         const box = document.createElement("input");
@@ -299,7 +437,7 @@
         block.append(itemChrome(list, index, item.alt || "Linha " + (index + 1)));
         const row = document.createElement("div");
         row.className = "row";
-        row.append(preview(item.src), field("URL da imagem", "src", item, "url"));
+        row.append(preview(item.src), imageField("URL da imagem", "src", item));
         block.append(
           field("Link", "href", item, "url"),
           field("Texto alternativo", "alt", item),
@@ -319,7 +457,7 @@
     row.className = "row";
     row.append(
       preview(data.hero.src),
-      field("URL da imagem", "src", data.hero, "url")
+      imageField("URL da imagem", "src", data.hero)
     );
     card.append(field("Texto alternativo", "alt", data.hero), row);
   }
@@ -360,12 +498,9 @@
     const block = document.createElement("div");
     block.className = "item";
     block.append(itemChrome(group.items, index, item.title || "Catálogo " + (index + 1)));
-    const srcField = field("URL da capa", "src", item, "url");
-    const srcInput = srcField.querySelector("input");
-    srcInput.setAttribute("data-key", "src");
     const row = document.createElement("div");
     row.className = "row";
-    row.append(preview(item.src), srcField);
+    row.append(preview(item.src), imageField("URL da capa", "src", item));
     block.append(field("Título", "title", item), catalogLinkField(item), row);
     return block;
   }

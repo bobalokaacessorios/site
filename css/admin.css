@@ -213,6 +213,34 @@ body {
   color: var(--muted);
 }
 
+.field-image-controls {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.field-image-controls input[type="url"] {
+  flex: 1;
+  min-width: 0;
+}
+
+.field-image-controls .btn {
+  flex-shrink: 0;
+  min-height: 42px;
+}
+
+.field-image input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.field-image {
+  position: relative;
+}
+
 .color-field {
   display: flex;
   align-items: center;
@@ -275,6 +303,7 @@ body {
   border-radius: 8px;
   background: var(--cream);
   border: 1px solid var(--line);
+  margin-top: 22px;
 }
 
 .preview-round {
@@ -286,7 +315,7 @@ body {
 .row {
   display: flex;
   gap: 12px;
-  align-items: flex-end;
+  align-items: flex-start;
 }
 
 .row .field {
@@ -374,5 +403,9 @@ body {
 
   .admin-header {
     flex-wrap: wrap;
+  }
+
+  .field-image-controls {
+    flex-direction: column;
   }
 }
